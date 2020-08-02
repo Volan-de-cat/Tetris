@@ -21,12 +21,12 @@ private:
 	COORD mDwBufferCoord;
 	SMALL_RECT mLpWriteRegion;
 
-	int g, f, k;
+
 
 	void Render();
 
 public:
-	//размеры области вывода по горизонтали и вертикали в символах
+	//dimensions of the output area horizontally and vertically in characters
 	const int X_SIZE;
 	const int Y_SIZE;
 	
@@ -36,14 +36,13 @@ public:
 	virtual ~BaseApp();
 	
 	//проверяет заполнена ли линия и в случае заполнения удаляет линию и начисляет очки
-	int CheckLine();
 
 	//запускает игровой цикл
 	void Run();
 
 	//можно заполнить x,y-символ экрана определенным символом, или считать его
-	void SetChar(int x, int y, wchar_t c);
-	wchar_t GetChar(int x, int y);
+	void SetChar(int x, int y, char c);
+	char GetChar(int x, int y);
 
 	/*эта функция вызывается каждую игровую итерацию, её можно переопределить, в наследнике класса.
 	в неё приходит deltaTime - разница во времени между предыдущей итерацией и этой, в секундах*/

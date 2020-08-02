@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef H_Tetris
+#define H_Tetris
 #include "BaseApp.h"
 
 class Tetris : public BaseApp
@@ -30,6 +30,8 @@ private:
 	int a4;
 	int b4;
 
+	int g, f;
+
 	bool mDirection;
 
 
@@ -41,4 +43,6 @@ public:
 	int Randomizer(int z);
 	int Rotation(int z, int k);
 	virtual bool Check();
+	int CheckLine();
 };
+#endif

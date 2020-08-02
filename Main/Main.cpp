@@ -1,6 +1,6 @@
 ﻿#include "Tetris.h"
 
-void main()
+int main()
 {
 	Tetris app;
 	app.Run();

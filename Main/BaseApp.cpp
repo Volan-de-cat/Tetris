@@ -1,14 +1,16 @@
-#include "Tetris.h"
 #include <algorithm>
 #include <time.h>
 #include <conio.h>
 #include <assert.h>
 #include <strsafe.h>
+#include "Tetris.h"
+#include "Constants.h"
 
 #include"Timer.h"
 
 BaseApp::BaseApp(int xSize, int ySize) : X_SIZE(xSize), Y_SIZE(ySize)
 {
+	
 	console = GetConsoleWindow();
 	GetWindowRect(console, &r);
 	MoveWindow(console, r.left, r.top, 243, 500, TRUE);
@@ -18,15 +20,6 @@ BaseApp::BaseApp(int xSize, int ySize) : X_SIZE(xSize), Y_SIZE(ySize)
 
 	mConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	mConsoleIn = GetStdHandle(STD_INPUT_HANDLE);
-
-	if (!SetConsoleScreenBufferSize(mConsole, windowBufSize))
-	{
-		cout << "SetConsoleScreenBufferSize failed with error " << GetLastError() << endl;
-	}
-	if (!SetConsoleWindowInfo(mConsole, TRUE, &windowSize))
-	{
-		cout << "SetConsoleWindowInfo failed with error " << GetLastError() << endl;
-	}
 
 	CONSOLE_CURSOR_INFO cursorInfo;
 	GetConsoleCursorInfo(mConsole, &cursorInfo);
@@ -47,45 +40,31 @@ BaseApp::BaseApp(int xSize, int ySize) : X_SIZE(xSize), Y_SIZE(ySize)
 	mLpWriteRegion.Right = X_SIZE + 1;
 	mLpWriteRegion.Bottom = Y_SIZE + 1;	// прямоугольник для чтения
 
-
 	for (int x = 0; x < X_SIZE + 1; x++)
 	{
 		for (int y = 0; y < Y_SIZE + 1; y++)
 		{
-			if (y < 27)
+			if (y < Y_SIZE)
 			{
-				SetChar(0, y, L'#');
-				SetChar(25, y, L'#');
-
-			}
-			if (y < 26)
-			{
-				if (y < 23)
+				SetChar(0, y, getBorder());
+				SetChar(X_SIZE - 1, y, getBorder());
+				if (y < getInnerBorder())
 				{
-					SetChar(16, y, L'#');
-				}
-				else
-				{
-					SetChar(16, y, L' ');
+					SetChar(getLine() + 1, y, getBorder());
 				}
 			}
-			SetChar(x, y, L' ');
+			SetChar(x, y, getSpace());
 		}
-		if ((x >= 4) &&(x <= 10))
+		string Score_ = getScore();
+		if (x <= Score_.length())
 		{
-			SetChar(4, 24, L'S');
-			SetChar(5, 24, L'C');
-			SetChar(6, 24, L'O');
-			SetChar(7, 24, L'R');
-			SetChar(8, 24, L'E');
-			SetChar(9, 24, L':');
+			SetChar(x, getInnerBorder() + 1, Score_[x]);
 		}
-		if (x < 26)
+		if (x < X_SIZE)
 		{
-			SetChar(x, 0, L'#');
-			SetChar(x, 22, L'#');
-			SetChar(x, 26, L'#');
-
+			SetChar(x, 0, getBorder());
+			SetChar(x, getInnerBorder() - 1, getBorder());
+			SetChar(x, Y_SIZE, getBorder());
 		}
 	}
 }
@@ -95,21 +74,21 @@ BaseApp::~BaseApp()
 	free(mChiBuffer);
 }
 
-void BaseApp::SetChar(int x, int y, wchar_t c)
+void BaseApp::SetChar(int x, int y, char c)
 {
 	mChiBuffer[x + (X_SIZE + 1)*y].Char.UnicodeChar = c;
 	mChiBuffer[x + (X_SIZE + 1)*y].Attributes = FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED;
-	if (c == '#')
+	if (c == getBorder())
 	{
 		mChiBuffer[x + (X_SIZE + 1)*y].Attributes = FOREGROUND_BLUE | FOREGROUND_RED;
 	}
-	if (c == '$')
+	if (c == getObject())
 	{
 		mChiBuffer[x + (X_SIZE + 1)*y].Attributes = FOREGROUND_BLUE;
 	}
 }
 
-wchar_t BaseApp::GetChar(int x, int y)
+char BaseApp::GetChar(int x, int y)
 {
 	return mChiBuffer[x + (X_SIZE + 1)*y].Char.AsciiChar;
 }
@@ -120,39 +99,6 @@ void BaseApp::Render()
 	{
 		printf("WriteConsoleOutput failed - (%d)\n", GetLastError());
 	}
-}
-
-int BaseApp::CheckLine()
-{
-	char t[16];
-	for (int y = 1; y < 22; y++)
-	{
-		for (int x = 0; x < 14; x++)
-		{
-				t[x] = GetChar(x+1, y);
-				if (t[x] == '$')
-				{
-					f++;
-					k = y;
-				}
-		}
-		if (f == 14)
-		{
-			for (int y = k; y > 1; y--)
-			{
-				for (int x = 0; x < 14; x++)
-				{
-					SetChar(x, y, L' ');
-					char m;
-					m = GetChar(x, y - 1);
-					SetChar(x, y, m);
-				}
-			}
-			g += 1;
-		}
-		f = 0;
-	}
-	return g;
 }
 
 void BaseApp::Run()

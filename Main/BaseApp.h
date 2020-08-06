@@ -40,6 +40,8 @@ public:
 	//запускает игровой цикл
 	void Run();
 
+	virtual void Field(int xSize, int ySize) {}
+
 	//можно заполнить x,y-символ экрана определенным символом, или считать его
 	void SetChar(int x, int y, char c);
 	char GetChar(int x, int y);

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -152,6 +152,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseApp.cpp" />
+    <ClCompile Include="Fabric.cpp" />
+    <ClCompile Include="Figura.cpp" />
+    <ClCompile Include="Graphiсs.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Tetris.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -159,6 +162,9 @@
   <ItemGroup>
     <ClInclude Include="BaseApp.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="Fabric.h" />
+    <ClInclude Include="Figura.h" />
+    <ClInclude Include="Graphics.h" />
     <ClInclude Include="Tetris.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>

@@ -5,6 +5,7 @@
 #include <strsafe.h>
 #include "Tetris.h"
 #include "Constants.h"
+#include "Graphics.h"
 
 #include"Timer.h"
 
@@ -40,33 +41,7 @@ BaseApp::BaseApp(int xSize, int ySize) : X_SIZE(xSize), Y_SIZE(ySize)
 	mLpWriteRegion.Right = X_SIZE + 1;
 	mLpWriteRegion.Bottom = Y_SIZE + 1;	// прямоугольник для чтения
 
-	for (int x = 0; x < X_SIZE + 1; x++)
-	{
-		for (int y = 0; y < Y_SIZE + 1; y++)
-		{
-			if (y < Y_SIZE)
-			{
-				SetChar(0, y, getBorder());
-				SetChar(X_SIZE - 1, y, getBorder());
-				if (y < getInnerBorder())
-				{
-					SetChar(getLine() + 1, y, getBorder());
-				}
-			}
-			SetChar(x, y, getSpace());
-		}
-		string Score_ = getScore();
-		if (x <= Score_.length())
-		{
-			SetChar(x, getInnerBorder() + 1, Score_[x]);
-		}
-		if (x < X_SIZE)
-		{
-			SetChar(x, 0, getBorder());
-			SetChar(x, getInnerBorder() - 1, getBorder());
-			SetChar(x, Y_SIZE, getBorder());
-		}
-	}
+	Field(X_SIZE, Y_SIZE);
 }
 
 BaseApp::~BaseApp()
